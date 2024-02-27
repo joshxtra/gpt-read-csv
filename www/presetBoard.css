@@ -1,0 +1,126 @@
+html,
+body {
+    overscroll-behavior: none;
+}
+
+#uiContainer {
+    display: grid;
+    grid-auto-flow: dense;
+    grid-template-columns: 6fr;
+    grid-gap: 10px;
+    height: 94vh;
+}
+
+#buttonGrid {
+    display: grid;
+    grid-auto-flow: dense;
+    min-width: 500px;
+    padding: 10px 10px;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-gap: 0px;
+}
+
+.cam1 {
+    background-color: white;
+    border: 3px solid #13aa52;
+    color: #13aa52;
+    grid-column: 1;
+}
+
+.cam1ActivePreset {
+    background-color: #13aa52;
+    color: white;
+}
+
+.cam2 {
+    background-color: white;
+    border: 3px solid #1320aa;
+    color: #1320aa;
+    grid-column: 2;
+}
+
+.cam2ActivePreset {
+    background-color: #1320aa;
+    color: white;
+}
+
+.cam3 {
+    background-color: white;
+    border: 3px solid #aa13a0;
+    color: #aa13a0;
+    grid-column: 3;
+}
+
+.cam3ActivePreset {
+    background-color: #aa13a0;
+    color: white;
+}
+
+.cam4 {
+    background-color: white;
+    border: 3px solid #aa1313;
+    color: #aa1313;
+    grid-column: 4;
+}
+
+.cam4ActivePreset {
+    background-color: #aa1313;
+    color: white;
+}
+
+.cam5 {
+    background-color: white;
+    border: 3px solid #cb8712;
+    color: #cb8712;
+    grid-column: 5;
+}
+
+.cam5ActivePreset {
+    background-color: #cb8712;
+    color: white;
+}
+
+.cam6 {
+    background-color: white;
+    border: 3px solid #ccc613;
+    color: ##ccc613;
+    grid-column: 6;
+}
+
+.cam6ActivePreset {
+    background-color: #ccc613;
+}
+
+#sceneControl {
+    display: none;
+}
+
+#slotContainer {
+    display: none;
+}
+
+#buttonGrid>* {
+    height: 100%;
+    width: ;
+    border-radius: 0px;
+    box-shadow: rgba(0, 0, 0, .1) 0 2px 4px 0;
+    box-sizing: border-box;
+    cursor: pointer;
+    font-family: "Akzidenz Grotesk BQ Medium", -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    outline: none;
+    outline: 0;
+    padding: 8px 8px;
+    margin: 0px;
+    text-align: center;
+    transform: translateY(0);
+    transition: transform 150ms, box-shadow 150ms;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+}
+
+.active {
+    background-color: #848be0;
+}
