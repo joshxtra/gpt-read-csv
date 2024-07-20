@@ -1,0 +1,17 @@
+Formatierung der Buttons mit Nummern untereinander
+
+Seitentitel "PresetBoard"
+
+Nach storing wird button nicht hinterlegt
+
+kein Preset Edit
+
+Preset vor 51 und nach 90 blockieren mit meldung bei fehl upload
+
+Preset Range: Brauchen wir nicht.
+
+Einlesen von mehr als 7 Spalten blockieren
+
+(Checkbox für Sicherheitsabfrage beim storen?)
+
+Unterordner für csv files

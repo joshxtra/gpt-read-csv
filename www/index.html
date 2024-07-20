@@ -14,22 +14,42 @@
 
 <body onload="INIT()">
 
-    <input type="file" id="fileInput" accept=".csv">
-    <button id="loadCSVButton">reload preset names</button>
+<div id="settingsBar">
+    <div>
+        <input type="file" id="fileInput" accept=".csv, .xlsx">
+    </div>
+<!--     <button id="loadCSVButton">reload preset names</button> -->
 
-    <input type="checkbox" id="storePresetToggle">
-    <label for="storePresetToggle">Store presets</label>
-    <button id="editButton">Edit Preset Names</button>
+    <div>
+        <input type="checkbox" id="storePresetToggle">
+        <label for="storePresetToggle">Presets speichern</label>
+        <span id="confirmationMessage" style="display: none; font-weight: bold;"></span>
+    </div>
+    <div>
+        <input type="checkbox" id="showConfirmationToggle">
+        <label for="showConfirmationToggle">vor dem Speichern fragen</label>
+    </div>
 
-    <div style="margin-left: 25px; display: inline;">
-        <label for="startPreset">Preset Range:</label>
-        <select name="start preset" id="startPreset">
-            <option value="51">51-60</option>
-            <option value="61">61-70</option>
-            <option value="71">71-80</option>
-            <option value="81">81-90</option>
+ 
+
+    <div>
+        <label for="presetRange">Start Preset</label>
+        <select name="preset Range" id="presetRange">
+            <option value="51">51</option>
+            <option value="61">61</option>
+            <option value="71">71</option>
+            <option value="81">81</option>
         </select>
     </div>
+    <div>    
+        <input type="checkbox" id="displayRangeToggle">nur <input type="text" value="10" id="displayRange" style="width:15px"> presets anzeigen</input></input>
+    </div>
+
+    <div>
+        <input type="checkbox" id="renderCamNumbersToggle">
+        <label for="renderCamNumbersToggle">Kamera Nr. in Buttons anzeigen</label>
+    </div>
+</div>
 
     <div id="sceneControl" style="float: right;">
         <label for="storeSceneToggle">Store Scenes</label>
@@ -39,15 +59,10 @@
     </div>
     <div id="uiContainer">
         <div id="buttonGrid"></div>
-        <div class="editContainer" style="display: none;">
-
-            <button id="saveButton">Save Changes</button>
-        </div>
         <div id="slotContainer" style="height: 600px; overflow-y: auto;">
             Slot items will be dynamically generated here
         </div>
     </div>
-
 
 
 </body>

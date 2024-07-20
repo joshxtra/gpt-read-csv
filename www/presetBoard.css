@@ -1,6 +1,67 @@
+:root {
+    --buttonHeight: 100px;
+    --buttonWidth: 100px;
+    --buttonBorderRadius: 0px;
+    --buttonBorderWidth: 0px;
+    --buttonBorder: 0px solid #00000023;
+    --buttonShadow: rgba(0, 0, 0, .1) 0 2px 4px 0;
+    --buttonFontFamily: "Akzidenz Grotesk BQ Medium", -apple-system, BlinkMacSystemFont, sans-serif;
+    --buttonFontSize: 16px;
+    --buttonFontWeight: 400;
+    --buttonOutline: none;
+    --buttonPadding: 0px;
+    --buttonMargin: 0px;
+    --buttonTextAlign: center;
+    --buttonTransform: translateY(0);
+    --buttonTransition: transform 150ms, box-shadow 150ms;
+    --buttonUserSelect: none;
+    --buttonWebkitUserSelect: none;
+    --buttonTouchAction: manipulation;
+
+    --maxButtonHeight: 100px;
+
+    --cam1Color: #13aa52;
+    --cam2Color: #1320aa;
+    --cam3Color: #aa13a0;
+    --cam4Color: #aa1313;
+    --cam5Color: #cb8712;
+    --cam6Color: #ccc613;
+    --presetSavingColor: #f08d84;
+    --presetSavingTextColor: white;
+}
+
 html,
 body {
     overscroll-behavior: none;
+}
+
+@keyframes blinkBackground {
+    0%, 49.99% {
+      background-color: white;
+    }
+    50%, 100% {
+      background-color: var(--presetSavingColor);
+    }
+  }
+  
+  .blinking-background {
+    animation: blinkBackground 1.2s infinite;
+    transition: background-color 50ms;
+  }
+
+
+#settingsBar {
+    display: grid;
+    grid-template-columns: auto auto auto auto auto auto;
+    grid-gap: 10px;
+    padding: 10px 10px;
+    background-color: #00000019;
+    border-radius: 5px;
+}
+
+
+#settingsBar>div {
+    display: inline
 }
 
 #uiContainer {
@@ -8,87 +69,103 @@ body {
     grid-auto-flow: dense;
     grid-template-columns: 6fr;
     grid-gap: 10px;
-    height: 94vh;
+    min-height: 94vh;
 }
 
 #buttonGrid {
     display: grid;
     grid-auto-flow: dense;
+/*     grid-template-rows: repeat(auto-fill, minmax(95px, 1fr)); */
     min-width: 500px;
     padding: 10px 10px;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
     grid-gap: 0px;
+    grid-auto-rows: 1fr;
+    align-content: start;
+    align-items: start;
+ 
+
 }
 
 .cam1 {
     background-color: white;
-    border: 3px solid #13aa52;
-    color: #13aa52;
+    border: 3px solid var(--cam1Color);
+    color: var(--cam1Color);
     grid-column: 1;
 }
 
+/* .cam1 .cameraNumText {
+    display: table-cell;
+    padding: 0px 5px;
+    background-color: var(--cam1Color);
+    color: white;
+    border-style: solid;
+    border-radius: 0px;
+    align-self: auto
+} */
+
 .cam1ActivePreset {
-    background-color: #13aa52;
+    background-color: var(--cam1Color);
     color: white;
 }
 
 .cam2 {
     background-color: white;
-    border: 3px solid #1320aa;
-    color: #1320aa;
+    border: 3px solid var(--cam2Color);
+    color: var(--cam2Color);
     grid-column: 2;
 }
 
 .cam2ActivePreset {
-    background-color: #1320aa;
+    background-color: var(--cam2Color);
     color: white;
 }
 
 .cam3 {
     background-color: white;
-    border: 3px solid #aa13a0;
-    color: #aa13a0;
+    border: 3px solid var(--cam3Color);
+    color: var(--cam3Color);
     grid-column: 3;
 }
 
 .cam3ActivePreset {
-    background-color: #aa13a0;
+    background-color: var(--cam3Color);
     color: white;
 }
 
 .cam4 {
     background-color: white;
-    border: 3px solid #aa1313;
-    color: #aa1313;
+    border: 3px solid var(--cam4Color);
+    color: var(--cam4Color);
     grid-column: 4;
 }
 
 .cam4ActivePreset {
-    background-color: #aa1313;
+    background-color: var(--cam4Color);
     color: white;
 }
 
 .cam5 {
     background-color: white;
-    border: 3px solid #cb8712;
-    color: #cb8712;
+    border: 3px solid var(--cam5Color);
+    color: var(--cam5Color);
     grid-column: 5;
 }
 
 .cam5ActivePreset {
-    background-color: #cb8712;
+    background-color: var(--cam5Color);
     color: white;
 }
 
 .cam6 {
     background-color: white;
-    border: 3px solid #ccc613;
+    border: 3px solid var(--cam6Color);
     color: ##ccc613;
     grid-column: 6;
 }
 
 .cam6ActivePreset {
-    background-color: #ccc613;
+    background-color: var(--cam6Color);
 }
 
 #sceneControl {
@@ -100,8 +177,12 @@ body {
 }
 
 #buttonGrid>* {
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+    align-items: justify;
     height: 100%;
-    width: ;
+    max-height: var(--maxButtonHeight);
+    width: 100%;
     border-radius: 0px;
     box-shadow: rgba(0, 0, 0, .1) 0 2px 4px 0;
     box-sizing: border-box;
@@ -111,7 +192,7 @@ body {
     font-weight: 400;
     outline: none;
     outline: 0;
-    padding: 8px 8px;
+    padding: 0px;
     margin: 0px;
     text-align: center;
     transform: translateY(0);
@@ -119,6 +200,26 @@ body {
     user-select: none;
     -webkit-user-select: none;
     touch-action: manipulation;
+}
+
+.buttonNumbers {
+    display: grid;
+    width: 100%;
+    height: 100%;
+    background-color: #00000023;
+}
+
+.cameraNumText, .presetNumText {
+    display: table-cell;
+    margin: auto;
+    padding: 3px 0px;
+    justify-self: center;
+}
+
+.presetNameText {
+    display: table-cell;
+    font-weight: bold;
+    margin: auto;
 }
 
 .active {

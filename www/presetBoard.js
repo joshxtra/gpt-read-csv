@@ -8,9 +8,10 @@ const cameraUrls = [
     "http://192.168.2.196/cgi-bin/aw_ptz?cmd=",
 ];
 
-const csvPath = 'ptz-presets.csv'; // Path to csv file
-const offset = document.getElementById('startPreset').value - 1; // Default preset offset value
+const csvPath = 'presets/ptz-presets.csv'; // Path to csv file
+let offset = document.getElementById('presetRange').value - 1; // Default preset offset value
 console.log(offset)
+let parsedCSV = [];
 
 // fileInput observer
 const fileInput = document.getElementById("fileInput");
@@ -19,9 +20,9 @@ const observer = new MutationObserver((mutations) => {
         if (mutation.type === "attributes" && mutation.attributeName === "lastModified") {
             fileInput.click(); // Trigger re-selection
             parseCSVFromUpload()
-                .then(parsedData => {
-                    console.log(parsedData); // (Optional) Verify data
-                    initButtonGrid(parsedData);
+                .then(parsedCSV => {
+                    console.log(parsedCSV); // (Optional) Verify data
+                    initButtonGrid(parsedCSV, offset);
                 })
                 .catch(error => console.error("Error:", error));
         }
@@ -31,99 +32,85 @@ const observer = new MutationObserver((mutations) => {
 observer.observe(fileInput, { attributes: true });
 
 
-// Add event listener for fileInput change
+/* // Add event listener for fileInput change
 fileInput.addEventListener('change', function () {
     parseCSVFromUpload()
-        .then(parsedData => {
-            console.log(parsedData); // (Optional) Verify data
-            initButtonGrid(parsedData);
+        .then(parsedCSV => {
+            console.log(parsedCSV); // (Optional) Verify data
+            initButtonGrid(parsedCSV, offset);
         })
         .catch(error => console.error("Error:", error));
-});
+}); */
 
-
-// Add event listener for offset
-document.getElementById('startPreset').addEventListener('change', function () {
-    const offset = document.getElementById('startPreset').value - 1; // Default preset offset value
-    console.log(offset)
-    parseCSVFromUpload()
-        .then(parsedData => {
-            console.log(parsedData); // (Optional) Verify data
-            initButtonGrid(parsedData);
-        })
-        .catch(error => console.error("Error:", error));
-});
-
-// Add event listener to the loadCSVButton
-document.getElementById('loadCSVButton').addEventListener('click', () => {
-    const offset = document.getElementById('startPreset').value - 1; // Default preset offset value
-    console.log(offset);
-    parseCSVFromUpload()
-        .then(parsedData => {
-            console.log(parsedData); // (Optional) Verify data
-            initButtonGrid(parsedData);
-        })
-        .catch(error => console.error("Error:", error));
-});
-
-
-// Add event listener to the checkbox
-document.getElementById('storePresetToggle').addEventListener('change', function () {
-    const offset = document.getElementById('startPreset').value - 1; // Default preset offset value
-    console.log(offset)
-    parseCSVFromUpload()
-        .then(parsedData => {
-            console.log(parsedData); // (Optional) Verify data
-            initButtonGrid(parsedData);
-        })
-        .catch(error => console.error("Error:", error));
-});
-
-
-const buttonGrid = document.getElementById("buttonGrid");
-const editContainer = document.getElementById("editContainer");
-const saveButton = document.getElementById("saveButton");
-const editButton = document.getElementById("editButton");
-
-let grid = null;
-
-// Function to create buttons
-function createButtons() {
-    buttonGrid.innerHTML = "";
-    parsedCSV.forEach(item => {
-        const button = document.createElement("button");
-        button.textContent = item.text; // Assuming the button text is in an "text" property
-        // ... other button configurations
-        buttonGrid.appendChild(button);
-    });
-}
-
-// Edit button click handler
-editButton.addEventListener("click", () => {
-    if (!grid) {
-        // Create DataGridXL once
-        grid = new DataGridXL(document.getElementById("grid"), {
-            data: parsedCSV,
-            // ... other DataGridXL options
+// Event listener for file input
+fileInput.addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        Papa.parse(file, {
+            complete: function(results) {
+                parsedCSV = results.data; // Store the parsed CSV data in the variable
+                initButtonGrid(parsedCSV, offset); // Create buttons from the CSV data
+            }
         });
     }
-    editContainer.style.display = "block";
-    buttonGrid.style.display = "none";
 });
 
-// Save changes button click handler
-saveButton.addEventListener("click", () => {
-    parsedCSV = grid.getData();
-    grid = null; // Destroy the grid
-    editContainer.style.display = "none";
-    buttonGrid.style.display = "block";
+
+// Add event listener to the save-checkbox
+document.getElementById('storePresetToggle').addEventListener('change', function () {
+    confirmationMessage.style.display = 'none';
+    initButtonGrid(parsedCSV);
+});
+
+// Add event listener to the save-checkbox
+document.getElementById('storePresetToggle').addEventListener('change', function () {
     initButtonGrid(parsedCSV);
 });
 
 
+// Add event listener for offset
+document.getElementById('presetRange').addEventListener('change', function () {
+    initButtonGrid(parsedCSV);
+});
+
+// Add event listener to the range-checkbox
+document.getElementById('displayRangeToggle').addEventListener('change', function () {
+    initButtonGrid(parsedCSV);
+});
+
+// Add event listener to the displayRange
+document.getElementById('displayRange').addEventListener('change', function () {
+    initButtonGrid(parsedCSV, offset);
+});
+
+// Add event listener to the displayRange
+document.getElementById('showConfirmationToggle').addEventListener('change', function () {
+    initButtonGrid(parsedCSV, offset);
+});
+
+// Add event listener to the displayRange
+document.getElementById('renderCamNumbersToggle').addEventListener('change', function () {
+    initButtonGrid(parsedCSV, offset);
+});
+
+
+/* // Add event listener to the loadCSVButton
+document.getElementById('loadCSVButton').addEventListener('click', () => {
+    const offset = document.getElementById('presetRange').value - 1; // Default preset offset value
+    console.log(offset);
+    parseCSVFromUpload()
+        .then(parsedCSV => {
+            console.log(parsedCSV); // (Optional) Verify data
+            parsedCSV = parsedCSV;
+            initButtonGrid(parsedCSV, offset);
+        })
+        .catch(error => console.error("Error:", error));
+}); */
+
+
 function getOffset() {
-    const offset = document.getElementById('startPreset').value - 1; // Default preset offset value
-    console.log(offset)
+    const offset = document.getElementById('presetRange').value - 1; // Default preset offset value
+    console.log('getOffset: ' + offset)
     return offset;
 }
 
@@ -159,41 +146,39 @@ async function parseCSVFromUpload() {
     }
 }
 
-// Func to parse info from csv to an Array
-function parseCSV(csvString) {
-    // Split the CSV string into rows
-    var rows = csvString.split('\n');
-
-    // Initialize an array to hold the rows
-    var parsedCSV = [];
-
-    // Iterate over each row
-    rows.forEach(function (row) {
-        // Split the row into individual values
-        var values = row.split(',');
-
-        // Push the row's values to the data array
-        parsedCSV.push(values);
-    });
-
-    return parsedCSV;
-}
-
 // Function to create button elements from the data-array
-function initButtonGrid(data, offset) {
-    4
+function initButtonGrid(data) {
 
+    // Clear the buttonGrid before creating new buttons  
     const buttonGrid = document.getElementById('buttonGrid');
     buttonGrid.innerHTML = '';
 
-    // Get state of checkbox if saving or recalling presets
+    // Get states of save-checkboxes if saving or recalling presets
     const storePresets = document.getElementById('storePresetToggle').checked;
+    const showConfirmation = document.getElementById('showConfirmationToggle').checked;
+
+    // Get state of range-checkbox
+    var showOnlyX = document.getElementById('displayRangeToggle').checked;
 
     // Change background color of the page to white for both cases
-    document.body.style.backgroundColor = 'white';
+    if (storePresets && !showConfirmation){
+        document.body.classList.add('blinking-background');
+    } else {
+        document.body.classList.remove('blinking-background');
+    };
+
+    // determine user settings
+    let offset = getOffset();
+    let displayRange = parseInt(document.getElementById('displayRange').value);
+    let startPreset = offset - 49;
+    let endPreset = startPreset + displayRange;
+    let renderCameraNumbers = document.getElementById('renderCamNumbersToggle').checked;
+    console.log('startPreset: ' + startPreset);
+    console.log('endPreset: ' + endPreset);    
+    console.log('displayRange: ' + displayRange);
 
     // Iterate over each row starting from the second row (skipping the header row)
-    for (var i = 1; i < data.length; i++) {
+    for (var i = startPreset; i < (showOnlyX ? endPreset : data.length); i++) {
         let presetNum = data[i][0]; // Get the preset number from the first column
         // Iterate over each camera's preset data
         for (var j = 1; j < data[i].length; j++) {
@@ -202,19 +187,33 @@ function initButtonGrid(data, offset) {
 
             const cameraUrl = cameraUrls[cameraNum - 1] + (storePresets ? '%23M' : '%23R') + ((presetNum < 10) ? '0' + (presetNum - 1) : (presetNum - 1)) + '&res=1';
             const button = document.createElement('button');
-            button.textContent = (presetNum < 10) ? '0' + presetNum + ' ' + presetName.trim() : presetNum + ' ' + presetName.trim();
+            //button.textContent = (presetNum < 10) ? '0' + presetNum + ' ' + presetName.trim() : presetNum + ' ' + presetName.trim();
             button.classList.add('cam' + (cameraNum)); // Add "cam" and "preset" prefix to button class
             button.classList.add('preset' + presetNum);
             button.classList.add('camButton');
+/*          const buttonNumText = document.createElement('p');
+            buttonNumText.classList.add('buttonNumText');
+            buttonNumText.innerHTML = cameraNum + '<br>' + presetNum; */
+            if (renderCameraNumbers) {
+                button.innerHTML = '<div class="buttonNumbers"><p class="cameraNumText">' + cameraNum + '</p><p class="presetNumText">' + presetNum + '</p></div>';
+            } else {
+                button.innerHTML = '<div class="buttonNumbers"><p class="presetNumText">' + presetNum + '</p></div>';
+            };
+            const presetNameText = document.createElement('p');
+            presetNameText.textContent = presetName.trim();
+            presetNameText.classList.add('presetNameText');
+
 
             // Button EventListener
             button.addEventListener('click', () => {
-                const responseData = handleButtonClicking(presetNum, cameraNum, cameraUrl, storePresets);
+                const responseData = handleButtonClicking(presetNum, cameraNum, cameraUrl, storePresets, showConfirmation);
                 handleButtonHighlighting(presetNum, cameraNum, responseData);
             });
 
             // Append the button directly to the buttonGrid
             buttonGrid.appendChild(button);
+            //button.appendChild(buttonNumText);
+            button.appendChild(presetNameText);
         };
     };
 };
@@ -236,26 +235,25 @@ async function fetchData(url) {
 
 
 // Function to handle Button Clicking (sending correct command and returning response)
-function handleButtonClicking(presetNum, cameraNum, cameraUrl, storePresets) {
+function handleButtonClicking(presetNum, cameraNum, cameraUrl, storePresets, showConfirmation) {
     if (storePresets) {
-        const confirmed = confirm('Möchtest du das Preset ' + presetNum + ' der Kamera ' + (cameraNum) + ' wirklich speichern?');
+        const confirmed = (showConfirmation ? confirm('Möchtest du das Preset ' + presetNum + ' der Kamera ' + (cameraNum) + ' wirklich speichern?') : true);
         if (!confirmed) {
             return false; // Prevents default behavior (opening link in new tab)
         } else {
             console.log('test');
         }
-        (async () => {
-            const responseData = await fetchData(cameraUrl);
-            console.log('Response data:', responseData);
-        })();
+        fetchDataFake(cameraUrl, function (response) {
+            console.log('Received text data:', response);
+        });
+        confirmationMessage = document.getElementById('confirmationMessage');
+        confirmationMessage.innerHTML = (cameraNum) + ' - ' + (presetNum) + ' gespeichert';
+        confirmationMessage.style.display = 'block';
         return responseData;
     }
-    //(async () => {
-    //    const responseData = await fetchData(cameraUrl);
-    //    console.log('Response data:', responseData); 
-    //})();
+
     //fetch(cameraUrl); // Sends a GET request to the specified URL
-    fetchDataJson(cameraUrl, function (response) {
+    fetchDataFake(cameraUrl, function (response) {
         console.log('Received text data:', response);
     });
 }
@@ -273,7 +271,7 @@ function handleButtonHighlighting(presetNum, cameraNum, responseData) {
     return false; // Prevents default behavior (opening link in new tab)
 }
 
-function fetchDataJson(url, callback) {
+function fetchDataFake(url, callback) {
     const callbackName = 'jsonpCallback_' + Math.round(100000 * Math.random());
     const script = document.createElement('script');
 
@@ -293,6 +291,13 @@ function fetchDataJson(url, callback) {
 
 
 
+parseCSVFromFile(csvPath)
+    .then(parsedData => {
+        console.log(parsedData); // (Optional) Verify data
+        parsedCSV = parsedData; // Store parsed data
+    })
+    .catch(error => console.error("Error:", error));
+
 
 
 // INIT
@@ -300,7 +305,8 @@ function INIT() {
     parseCSVFromFile(csvPath)
         .then(parsedData => {
             console.log(parsedData); // (Optional) Verify data
-            initButtonGrid(parsedData);
+
+            initButtonGrid(parsedData, getOffset());
         })
         .catch(error => console.error("Error:", error));
 };
